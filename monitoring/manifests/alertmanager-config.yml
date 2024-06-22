@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+data:
+  alertmanager.yml: |
+    global:
+      smtp_smarthost: 'smtp.gmail.com:587'
+      smtp_from: 'monitoring@gmail.com'
+      smtp_auth_username: 'adivasidk7@gmail.com'
+      smtp_auth_password: 'gics zxls aawx plgz'  # App password
+      smtp_require_tls: true
+
+    route:
+      group_by: ['alertname']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 1h
+      receiver: 'email-notifications'
+
+    receivers:
+    - name: 'email-notifications'
+      email_configs:
+      - to: 'adivasidk7@gmail.com'
+        send_resolved: true
+
+    inhibit_rules:
+    - source_match:
+        severity: 'critical'
+      target_match:
+        severity: 'warning'
+      equal: ['alertname', 'dev', 'instance']
+
